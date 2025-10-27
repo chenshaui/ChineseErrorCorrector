@@ -219,7 +219,34 @@ pip install -r requirements.txt
 # If you are in mainland China, you can set the mirror as follows:
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 ```
+方法一：直接启动VLLM服务，使用openai接口进行调用，只输出正确语句，部署脚本：
+``` sh
+CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector3-4B \
+    --port 8000 \
+    --max-model-len 1024 \
+    --gpu-memory-utilization 0.9 \
+    --seed 42 \
+    >chinese_corrector.log 2>&1 &
+```
+cURL 调用（openai格式）
+``` sh
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "twnlp/ChineseErrorCorrector3-4B",
+    "messages": [
+      {
+        "role": "user",
+        "content": "你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：对待每一项工作都要一丝不够。"
+      }
+    ],
+    "max_tokens": 1024,
+    "temperature": 0,
+    "seed": 42
+  }'
+```
 
+方法二：使用ChineseErrorCorrector推理，有对应的后处理操作。
 ```sh
 # 修改config.py
 #（1）根据不同的模型，修改的DEFAULT_CKPT_PATH，默认为twnlp/ChineseErrorCorrector3-4B(将模型下载，放在ChineseErrorCorrector/pre_model/twnlp/ChineseErrorCorrector3-4B)
@@ -227,7 +254,12 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --tru
 
 #批量预测
 python main.py
+#输出：
+'''
+[{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
+'''
 ```
+
 
 ### Transformers 批量推理
 
@@ -256,11 +288,6 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --tru
 
 #批量预测
 python main.py
-
-#输出：
-'''
-[{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
-'''
 
 ```
 
