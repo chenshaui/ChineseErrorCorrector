@@ -351,8 +351,8 @@ If this work is helpful, please kindly cite as:
 }
 ```
 ## Contact
--微信我：备注：姓名-公司名/学校名-NLP
-<img src="[https://github.com/shibing624/pycorrector/blob/master/docs/git_image/wechat.jpeg](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/we_chat.jpg)" width="200" />
+-微信我：请备注：姓名-公司名/学校名-NLP，后续会进入NLP技术交流群。
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/we_chat.jpg" width="200" />
 
 ## References
 
