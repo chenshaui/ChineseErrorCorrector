@@ -352,9 +352,9 @@ If this work is helpful, please kindly cite as:
 ```
 ## Contact
 
-**微信我：** 请备注：姓名-公司名/学校名-NLP，后续会进入NLP技术交流群。
+**微信：** NLP技术交流群。
 
-<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/we_chat.jpg" width="200" />
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/wechat.jpg" width="200" />
 
 
 ## References
