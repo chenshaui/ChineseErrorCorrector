@@ -19,6 +19,8 @@
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
+[2025/11/25] 发布[ChineseErrorCorrector3-4B论文](https://arxiv.org/abs/2511.17562) 🎉，更多技术细节，欢迎大家查阅。
+
 [2025/08/08] 发布[通用的文本评测工具-Common Errant（支持80种语言）](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/ChineseErrorCorrector/scores/README.md) 🎉，可以在高（中文、英文）、低资源（印地语、孟加拉语等）上进行文本纠错的评测。
 
 [2025/08/06] 发布[文本纠错相关论文（持续更新版）](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/README_paper.md) 🥳，方便大家进行研学。
@@ -342,12 +344,14 @@ If this work is helpful, please kindly cite as:
 
 ```bibtex
 
-@inproceedings{wei2024中小学作文语法错误检测,
-  title={中小学作文语法错误检测, 病句改写与流畅性评级的自动化方法研究},
-  author={Wei, Tian},
-  booktitle={Proceedings of the 23rd Chinese National Conference on Computational Linguistics (Volume 3: Evaluations)},
-  pages={278--284},
-  year={2024}
+@misc{tian2025chineseerrorcorrector34bstateoftheartchinesespelling,
+      title={ChineseErrorCorrector3-4B: State-of-the-Art Chinese Spelling and Grammar Corrector}, 
+      author={Wei Tian and YuhaoZhou},
+      year={2025},
+      eprint={2511.17562},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2511.17562}, 
 }
 ```
 ## Contact
