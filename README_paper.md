@@ -8,7 +8,7 @@ Welcome to contribute!
 ## 2025
 |paper|conference|resource|labels|
 |:---:|:---:|:---:|:---:|
-|ChineseErrorCorrector3-4B: State-of-the-Art Chinese Spelling and Grammar Corrector|Arxiv|[[pdf](https://arxiv.org/pdf/2511.17562)] [[code](https://github.com/TW-NLP/ChineseErrorCorrector)] |![](https://img.shields.io/badge/CGEC-blue) (https://img.shields.io/badge/CSC-green)|
+|ChineseErrorCorrector3-4B: State-of-the-Art Chinese Spelling and Grammar Corrector|arxiv|[[pdf](https://arxiv.org/pdf/2511.17562)] [[code](https://github.com/TW-NLP/ChineseErrorCorrector)] |![](https://img.shields.io/badge/CGEC-blue) ![](https://img.shields.io/badge/CSC-green)|
 |Explanation based In-Context Demonstrations Retrieval for Multilingual Grammatical Error Correction|NAACL2025|[[pdf](https://aclanthology.org/2025.naacl-long.251.pdf#:~:text=correspond%20to%20similar%20grammatical%20error,shot%20experiments%20on)] [[code](https://github.com/GMago-LeWay/FewShotGEC)] |![](https://img.shields.io/badge/CGEC-blue)|
 |Retrieval-Augmented Generation for Large Language Model based Few-shot Chinese Spell Checking|COLING 2025|[[pdf](https://aclanthology.org/2025.coling-main.717.pdf)][[code](https://github.com/ViTsing/RagID)] |![](https://img.shields.io/badge/CSC-green)|
 |DSGram: Dynamic Weighting Sub-Metrics for Grammatical Error Correction|AAAI2025|[[pdf](https://arxiv.org/pdf/2412.12832)] [[code](https://github.com/jxtse/GEC-Metrics-DSGram)] |![](https://img.shields.io/badge/CGEC-blue)|
