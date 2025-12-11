@@ -19,6 +19,8 @@
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
+[2025/12/11] 为进一步提升中文文本纠错能力，我们正全力研发全新一代 ChineseErrorCorrector4 💥。旨在构建当前最强的中文纠错基线，为下游应用提供更稳定、高精度的能力支持。
+
 [2025/11/25] 发布[ChineseErrorCorrector3-4B论文](https://arxiv.org/abs/2511.17562) 🎉，更多技术细节，欢迎大家查阅。
 
 [2025/08/08] 发布[通用的文本评测工具-Common Errant（支持80种语言）](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/ChineseErrorCorrector/scores/README.md) 🎉，可以在高（中文、英文）、低资源（印地语、孟加拉语等）上进行文本纠错的评测。
@@ -358,7 +360,7 @@ If this work is helpful, please kindly cite as:
 
 **微信：** NLP技术交流群。
 
-<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/wechat1.jpg" width="200" />
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/wechat.jpg" width="200" />
 
 
 ## References
