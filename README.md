@@ -15,7 +15,7 @@
 ## 介绍
 
 支持中文拼写和语法错误纠正，并开源[拼写和语法错误的增强工具](https://github.com/TW-NLP/ChineseErrorCorrector/tree/0.1.0)、大模型训练代码、[文本纠错相关论文](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/README_paper.md)和[通用的文本纠错评测工具](https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/ChineseErrorCorrector/scores/README.md)。荣获2024CCL 冠军
-🏆，[查看论文](https://aclanthology.org/2024.ccl-3.31/) ，[2023 NLPCC-NaCGEC纠错冠军🏆](https://github.com/TW-NLP/ChineseErrorCorrector?tab=readme-ov-file#nacgec-%E6%95%B0%E6%8D%AE%E9%9B%86)， [2022 FCGEC 纠错冠军🏆](https://github.com/TW-NLP/ChineseErrorCorrector?tab=readme-ov-file#fcgec-%E6%95%B0%E6%8D%AE%E9%9B%86)
+🏆， [2023 NLPCC-NaCGEC纠错冠军🏆](https://github.com/TW-NLP/ChineseErrorCorrector?tab=readme-ov-file#nacgec-%E6%95%B0%E6%8D%AE%E9%9B%86)， [2022 FCGEC 纠错冠军🏆](https://github.com/TW-NLP/ChineseErrorCorrector?tab=readme-ov-file#fcgec-%E6%95%B0%E6%8D%AE%E9%9B%86)
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
