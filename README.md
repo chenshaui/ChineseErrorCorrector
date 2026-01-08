@@ -360,7 +360,7 @@ If this work is helpful, please kindly cite as:
 
 **微信：** NLP技术交流群。
 
-<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/wechat.jpg" width="200" />
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/we_chat1.jpg" width="200" />
 
 
 ## References
