@@ -19,6 +19,8 @@
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
+[2026/02/11] 我们在modelscope开源了ChineseErrorCorrector3模型体验地址🥳，欢迎大家访问进行适用。[体验地址](https://www.modelscope.cn/studios/tiannlp/ChineseErrorCorrector) 
+
 [2025/12/11] 我们正在加速研发全新一代 ChineseErrorCorrector4 ⚡🔥，并同步筹备论文发布！这一版本将力求打造最强的中文文本纠错基线，提供更稳、更快、更准的整体体验。期待与大家再次相遇！🎉
 
 [2025/11/25] 发布[ChineseErrorCorrector3-4B论文](https://arxiv.org/abs/2511.17562) 🎉，更多技术细节，欢迎大家查阅。
