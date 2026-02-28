@@ -19,7 +19,10 @@
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
-[2026/02/11] 我们在modelscope开源了 ChineseErrorCorrector3 模型体验地址 🥳，欢迎大家访问进行试用。[体验地址](https://www.modelscope.cn/studios/tiannlp/ChineseErrorCorrector)
+[2026/02/28] 我们在 HuggingFace 和 ModelScope 开源了 ChineseErrorCorrector3 模型体验地址 🥳，欢迎大家访问进行试用。
+
+  🤗 [HuggingFace 体验地址](https://huggingface.co/spaces/twnlp/ChineseErrorCorrector3) &nbsp;|&nbsp; 👉 [ModelScope 体验地址](https://www.modelscope.cn/studios/tiannlp/ChineseErrorCorrector)
+
 
 [2025/12/11] 我们正在加速研发全新一代 ChineseErrorCorrector4 ⚡🔥，并同步筹备论文发布！这一版本将力求打造最强的中文文本纠错基线，提供更稳、更快、更准的整体体验。期待与大家再次相遇！🎉
 
