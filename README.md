@@ -19,12 +19,17 @@
 ，如有帮助，感谢star✨。
 
 ## 🔥🔥🔥 新闻
+
+[2026/04/07] 🎉🎉🎉 ChineseErrorCorrector4 荣获 **2026 ACL main** 收录！不久后将正式发布 ChineseErrorCorrector4 模型、数据集及论文，敬请期待！🚀
+
 [2026/02/28] 我们在 HuggingFace 和 ModelScope 开源了 ChineseErrorCorrector3 模型体验地址 🥳，欢迎大家访问进行试用。
 
   🤗 [HuggingFace 体验地址](https://huggingface.co/spaces/twnlp/ChineseErrorCorrector3) &nbsp;|&nbsp; 👉 [ModelScope 体验地址](https://www.modelscope.cn/studios/tiannlp/ChineseErrorCorrector)
 
-
 [2025/12/11] 我们正在加速研发全新一代 ChineseErrorCorrector4 ⚡🔥，并同步筹备论文发布！这一版本将力求打造最强的中文文本纠错基线，提供更稳、更快、更准的整体体验。期待与大家再次相遇！🎉
+
+<details>
+<summary>📋 查看更多历史更新</summary>
 
 [2025/11/25] 发布[ChineseErrorCorrector3-4B论文](https://arxiv.org/abs/2511.17562) 🎉，更多技术细节，欢迎大家查阅。
 
@@ -55,6 +60,8 @@
 
 [2024/06]
 v0.1.0版本：🎉🎉🎉开源一键语法错误增强工具，该工具可以进行14种语法错误的增强，不同行业可以根据自己的数据进行错误替换，来训练自己的语法和拼写模型。详见[Tag-v0.1.0](https://github.com/TW-NLP/ChineseErrorCorrector/tree/0.1.0)
+
+</details>
 
 ## 🎯模型列表
 
