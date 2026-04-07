@@ -20,7 +20,7 @@
 
 ## 🔥🔥🔥 新闻
 
-[2026/04/07] 🎉🎉🎉 ChineseErrorCorrector4 荣获 **2026 ACL main** 收录！不久后将正式发布 ChineseErrorCorrector4 模型、数据集及论文，敬请期待！🚀
+[2026/04/07] 🎉🎉🎉 ChineseErrorCorrector4 荣获 **2026 ACL main** ！不久后将正式发布 ChineseErrorCorrector4 模型、数据集及论文，正在整理中，敬请期待！🚀
 
 [2026/02/28] 我们在 HuggingFace 和 ModelScope 开源了 ChineseErrorCorrector3 模型体验地址 🥳，欢迎大家访问进行试用。
 
