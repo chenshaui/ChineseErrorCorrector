@@ -350,41 +350,25 @@ response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 print(response)
 
 ```
-# ELECTRA 错字门控（可选推理头）
+## ELECTRA 字级门控（可选）
 
-## 做什么用
+中文纠错主链路里，大模型单次推理成本高、延迟大。可选模块 `ChineseErrorCorrector/llm/infer/electra_char_gate_infer.py` 提供一层轻量字级二分类：在 Chinese ELECTRA 判别器上做 TokenClassification 微调，子词对齐到字，给出「该字是否像有错」的标签与概率。在调用 ErrorCorrect 之前，可先判断句子是否值得送进大模型；明显干净的句子可跳过生成，以省算力、降延迟。
 
-中文纠错主链路里，**大模型（如 ChineseErrorCorrector3-4B）** 单次推理成本高、延迟大。本模块在 **`ChineseErrorCorrector/llm/infer/electra_char_gate_infer.py`** 中提供一层 **轻量字级二分类**：基于 **Chinese ELECTRA 判别器** 微调的 **TokenClassification**（逐子词对齐到字，输出「该字是否像有错」的 0/1 及错字概率）。
+权重使用独立的 Hugging Face 模型或本地目录（与主仓库默认纠错权重无关）。需要 Fast tokenizer（`use_fast=True`，支持 offset_mapping）。基座与社区常用骨干一致：[hfl/chinese-electra-180g-base-discriminator](https://huggingface.co/hfl/chinese-electra-180g-base-discriminator)。
 
-- **用途**：在调用 `ErrorCorrect` 之前，先判断句子是否 **值得送进大模型**；对明显「干净」的句子可跳过生成，从而 **省算力、降延迟**。
-- **输出**：每条输入对应一个字典，含归一化文本 `text`、是否建议纠错 `need_correct`、句内最大错字概率 `max_p_err`、与字对齐的 `char_flags`（0/1 串）及有效长度 `char_end`，便于按业务阈值做门控或与下游日志对齐。
+### 加速思路
 
-权重为 **独立 Hub 模型或本地目录**（与主仓库默认纠错权重无关）；需 **Fast tokenizer**（`use_fast=True`，支持 `offset_mapping`）。基座谱系与社区常用骨干一致：**[hfl/chinese-electra-180g-base-discriminator](https://huggingface.co/hfl/chinese-electra-180g-base-discriminator)**。
+门控侧参数量远小于 4B/7B 纠错模型，且实现支持 padding batch（`batch_size` 可调）。仅对 `need_correct == True` 的句子跑 hf_infer 或 vllm_infer，无错或风险低的句子不再走自回归生成；实际收益取决于数据中无需纠错的比例、门控阈值和大模型 batch 策略，主要来自减少生成次数。
 
-## 能带来什么加速
+### 性能量级（供参考）
 
-1. **减少大模型调用次数**：仅对 `need_correct == True` 的句子跑 `hf_infer` / `vllm_infer`，无错或模型认为风险低的句子不再走自回归生成。
-2. **门控本身很轻**：ELECTRA 级判别器参数量远小于 4B/7B 纠错模型；实现支持 **padding batch**（`batch_size` 可调），适合线上批量预处理。
-3. **与主仓库输入一致**：`infer(input_list)` 的 `input_list` 与 `ErrorCorrect` 使用的 **原句列表** 相同，便于在现有脚本外包一层，而 **不必改 `main.py`**。
+同类字级门控在公开拼写向语料上，可出现字级召回约 0.99、F1 约 0.75 量级，适合少漏检前筛；精确率相对适中，需用 `sentence_threshold`（句级 max_p_err）在漏检与多调大模型之间折中。语法与混合难例上不如拼写稳，更适合省算力而非单独替代大模型。在 A100、较大 batch（如 512～1024）、`max_length=256` 等设置下，纯 GPU 前向可达约 100+ 句/秒量级；具体以本模型验证与线上实测为准。
 
-实际加速比取决于 **数据中「无需纠错」比例**、门控阈值以及大模型 batch 策略；门控开销通常相对生成可忽略，主要收益来自 **跳过的生成次数**。
+### 输入输出（与主仓库对齐）
 
-## 性能与效果（量级说明）
+与 ErrorCorrect 相同：入参为原句列表 `input_list: list[str]`。出参为字典列表，每条含 `source`、`text`（归一化后用于推理）、`need_correct`、`max_p_err`、`char_flags`、`char_end`。主链路纠错结果仍为 `res_format` 的 `source` / `target` / `errors`。
 
-以下为 **同类字级门控模型** 在公开拼写向语料上曾达到的大致水平，**仅供选型参考**；具体数字随训练数据、checkpoint、阈值而变，以你发布的模型卡与验证集为准。
-
-- **拼写类子集（CSC 风格）**：字级 **召回约 0.99、F1 约 0.75** 量级时，较适合作为「少漏检」的前筛；**精确率**相对适中，可能带来一定误报，需用 **`sentence_threshold`**（句级 `max_p_err` 门限）在「漏检 vs 多调大模型」之间折中。
-- **语法/混合难例**：字级门控对语法错误不如拼写稳，单独做门控时 **误报或漏检** 都可能更明显，更适合 **节省算力** 而非单独替代大模型纠错。
-- **推理吞吐**：在 **A100、batch 较大（如 512～1024）、`max_length=256`** 等设置下，纯 GPU 前向曾测得约 **100+ 句/秒** 量级；CPU 或小 batch 会慢很多。上线请以 **warmup + 实测 QPS** 为准。
-
-## 与主仓库接口的对应关系
-
-| 项目 | 主仓库 `ErrorCorrect` | 字级门控 `ElectraCharGateInfer` |
-|------|------------------------|----------------------------------|
-| 输入 | `input_list: list[str]` | 相同 |
-| 输出 | `res_format` → `source` / `target` / `errors` | `list[dict]`：`source`、`text`、`need_correct`、`max_p_err`、`char_flags`、`char_end` |
-
-## 集成示例（可选，不修改 `main.py`）
+### 示例（可不修改 main.py）
 
 ```python
 from ChineseErrorCorrector.main import ErrorCorrect
@@ -393,7 +377,7 @@ from ChineseErrorCorrector.llm.infer.electra_char_gate_infer import (
     filter_sources_for_llm,
 )
 
-GATE_MODEL = "组织或用户名/你的-electra-字级门控模型"  # Hub id 或本地路径
+GATE_MODEL = "组织或用户名/你的-electra-字级门控模型"
 
 gate = ElectraCharGateInfer(model_name_or_path=GATE_MODEL, sentence_threshold=0.5)
 correct = ErrorCorrect()
@@ -402,7 +386,6 @@ raw = ["对待每一项工作都要一丝不够。", "大约半个小时左右"]
 gate_rows = gate.infer(raw)
 to_fix, _ = filter_sources_for_llm(gate_rows)
 llm_out = correct.hf_infer(to_fix) if to_fix else []
-# 需保持与原列表顺序一致时，请按索引把门控结果与大模型输出合并（略）
 ```
 
 ## Citation
