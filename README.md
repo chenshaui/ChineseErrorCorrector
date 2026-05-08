@@ -350,11 +350,14 @@ response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 print(response)
 
 ```
+
 ## ELECTRA 字级门控（可选）
 
 中文纠错主链路里，大模型单次推理成本高、延迟大。可选模块 `ChineseErrorCorrector/llm/infer/electra_char_gate_infer.py` 提供一层轻量字级二分类：在 Chinese ELECTRA 判别器上做 TokenClassification 微调，子词对齐到字，给出「该字是否像有错」的标签与概率。在调用 ErrorCorrect 之前，可先判断句子是否值得送进大模型；明显干净的句子可跳过生成，以省算力、降延迟。
 
 权重使用独立的 Hugging Face 模型或本地目录（与主仓库默认纠错权重无关）。需要 Fast tokenizer（`use_fast=True`，支持 offset_mapping）。基座与社区常用骨干一致：[hfl/chinese-electra-180g-base-discriminator](https://huggingface.co/hfl/chinese-electra-180g-base-discriminator)。
+
+**字级门控默认权重（与代码中 `CHAR_GATE_HF_REPO_ID` 一致，发布前请改为你的实际上传路径）**：[模型卡](https://huggingface.co/username/chinese-char-error-detector-electra) · 仓库 id `username/chinese-char-error-detector-electra`。也可设置环境变量 `CHAR_GATE_HF_REPO_ID` 覆盖默认 id；本地 `save_pretrained` 目录可直接传给 `ElectraCharGateInfer(model_name_or_path=...)`。
 
 ### 加速思路
 
@@ -373,13 +376,12 @@ print(response)
 ```python
 from ChineseErrorCorrector.main import ErrorCorrect
 from ChineseErrorCorrector.llm.infer.electra_char_gate_infer import (
+    CHAR_GATE_HF_REPO_ID,
     ElectraCharGateInfer,
     filter_sources_for_llm,
 )
 
-GATE_MODEL = "组织或用户名/你的-electra-字级门控模型"
-
-gate = ElectraCharGateInfer(model_name_or_path=GATE_MODEL, sentence_threshold=0.5)
+gate = ElectraCharGateInfer(model_name_or_path=CHAR_GATE_HF_REPO_ID, sentence_threshold=0.5)
 correct = ErrorCorrect()
 
 raw = ["对待每一项工作都要一丝不够。", "大约半个小时左右"]
