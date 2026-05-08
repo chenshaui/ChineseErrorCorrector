@@ -2,7 +2,7 @@
 轻量字级「是否可能出错」推理头（ELECTRA TokenClassification），与主仓库
 `ErrorCorrect.hf_infer / vllm_infer` 的输入形式一致：list[str] 原句。
 
-输出为结构化 dict，字段与 docskill 字级流水线 `pipeline_char.py` 的 JSON 行一致，
+输出为结构化 dict，字段 字级流水线 `pipeline_char.py` 的 JSON 行一致，
 便于在大模型纠错前做门控，减少无效调用。
 
 使用方式（放在本仓库 ChineseErrorCorrector 包内后）::
@@ -32,7 +32,7 @@ from ChineseErrorCorrector.config import DEVICE
 
 
 def _normalize_text(text: str) -> str:
-    """与 docskill `normalize.normalize_text` 一致：NFKC + 空白折叠。"""
+    """与  `normalize.normalize_text` 一致：NFKC + 空白折叠。"""
     if text is None:
         return ""
     s = unicodedata.normalize("NFKC", str(text))
