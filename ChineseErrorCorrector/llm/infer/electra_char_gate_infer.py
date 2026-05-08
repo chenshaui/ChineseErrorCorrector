@@ -2,15 +2,21 @@
 轻量字级「是否可能出错」推理头（ELECTRA TokenClassification），与主仓库
 `ErrorCorrect.hf_infer / vllm_infer` 的输入形式一致：list[str] 原句。
 
-输出为结构化 dict，字段 字级流水线 `pipeline_char.py` 的 JSON 行一致，
-便于在大模型纠错前做门控，减少无效调用。
+输出为结构化 dict（`source`、`text`、`need_correct`、`max_p_err`、`char_flags`、`char_end`），
+便于在大模型纠错前做门控。
+
+公开权重默认与模块常量 `CHAR_GATE_HF_REPO_ID` / `CHAR_GATE_MODEL_CARD_URL` 一致；也可用环境变量
+`CHAR_GATE_HF_REPO_ID` 覆盖默认 id，无需改代码。
 
 使用方式（放在本仓库 ChineseErrorCorrector 包内后）::
 
-    from ChineseErrorCorrector.llm.infer.electra_char_gate_infer import ElectraCharGateInfer
+    from ChineseErrorCorrector.llm.infer.electra_char_gate_infer import (
+        ElectraCharGateInfer,
+        CHAR_GATE_HF_REPO_ID,
+    )
 
     gate = ElectraCharGateInfer(
-        model_name_or_path="你的HF用户名/chinese-char-error-detector-electra",
+        model_name_or_path=CHAR_GATE_HF_REPO_ID,
         sentence_threshold=0.5,
     )
     rows = gate.infer(["对待每一项工作都要一丝不够。", "大约半个小时左右"])
@@ -19,6 +25,7 @@
 """
 from __future__ import annotations
 
+import os
 import re
 import unicodedata
 from typing import Any
@@ -30,9 +37,17 @@ from transformers import AutoModelForTokenClassification, AutoTokenizer
 
 from ChineseErrorCorrector.config import DEVICE
 
+# 与 Hugging Face 模型卡 URL 一致：`https://huggingface.co/{CHAR_GATE_HF_REPO_ID}`
+# 发布到 Hub 后请改为实际上传的 ``用户名或组织名/仓库名``（与本文件同目录说明 md 同步修改）。
+CHAR_GATE_HF_REPO_ID = os.environ.get(
+    "CHAR_GATE_HF_REPO_ID",
+    "username/chinese-char-error-detector-electra",
+)
+CHAR_GATE_MODEL_CARD_URL = f"https://huggingface.co/{CHAR_GATE_HF_REPO_ID}"
+
 
 def _normalize_text(text: str) -> str:
-    """与  `normalize.normalize_text` 一致：NFKC + 空白折叠。"""
+    """与 docskill `normalize.normalize_text` 一致：NFKC + 空白折叠。"""
     if text is None:
         return ""
     s = unicodedata.normalize("NFKC", str(text))
