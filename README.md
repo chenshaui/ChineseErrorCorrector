@@ -363,9 +363,31 @@ print(response)
 
 门控侧参数量远小于 4B/7B 纠错模型，且实现支持 padding batch（`batch_size` 可调）。仅对 `need_correct == True` 的句子跑 hf_infer 或 vllm_infer，无错或风险低的句子不再走自回归生成；实际收益取决于数据中无需纠错的比例、门控阈值和大模型 batch 策略，主要来自减少生成次数。
 
+### 数据与标签
+
+- **训练/验证主 JSONL**：由 CEC 转换而来，每行 `{"source","target"}`；本地常见文件名 `data/cec_train.jsonl`、`data/cec_validation.jsonl`。
+- **字级标签**：`char_align.py` 对归一化后的 `source`/`target` 做 `difflib.SequenceMatcher`，`replace`/`delete` 在 source 上标 **1**，其余 **0**；纯 insert 在 target 侧时 source 可能全 0，属规则定义而非实现错误。
+- **分层验证集** `data/val_task_stratified.jsonl`：由 `prepare_task_validation_jsonl.py` 从 **csc / cgc** 等抽样，字段含 `task`（`spelling` / `grammar` / `mixed`）与 `corpus`。**mixed** 在 Lang8 不可用时自动回退为 **`cec_validation.jsonl`** 抽样，并在 `corpus` 中标注 `mixed_fallback:cec_validation.jsonl`。
+
+---
+
 ### 性能量级（供参考）
 
-同类字级门控在公开拼写向语料上，可出现字级召回约 0.99、F1 约 0.75 量级，适合少漏检前筛；精确率相对适中，需用 `sentence_threshold`（句级 max_p_err）在漏检与多调大模型之间折中。语法与混合难例上不如拼写稳，更适合省算力而非单独替代大模型。在 A100、较大 batch（如 512～1024）、`max_length=256` 等设置下，纯 GPU 前向可达约 100+ 句/秒量级；具体以本模型验证与线上实测为准。
+## Evaluation (Quick Snapshot)
+
+`val_task_stratified.jsonl`（7500 句，spelling/grammar/mixed 各 2500）上的一次对照实验：
+
+| Split | ELECTRA (P / R / F1) | MacBERT (P / R / F1) | Better |
+|---|---|---|---|
+| Overall (char-level) | 0.256 / 0.822 / 0.391 | 0.264 / 0.797 / 0.396 | MacBERT F1 略高，ELECTRA Recall 更高 |
+| Spelling (char-level) | **0.611 / 0.986 / 0.754** | 0.568 / 0.984 / 0.720 | **ELECTRA** |
+| Grammar (char-level) | 0.214 / 0.823 / 0.339 | **0.225 / 0.838 / 0.355** | **MacBERT** |
+| Mixed (char-level) | 0.206 / **0.732** / **0.322** | **0.210** / 0.662 / 0.319 | ELECTRA（Recall/F1） |
+| Sentence gate (best F1, `max_p_err` sweep) | **0.859** | 0.854 | **ELECTRA** |
+
+
+> 注：这是阶段性结果（固定一次实验配置）。上线时请在你的验证集上重新做阈值 sweep。
+同类字级门控在公开拼写向语料上，可出现字级召回约 0.986、F1 约 0.75 量级，适合少漏检前筛；精确率相对适中，需用 `sentence_threshold`（句级 max_p_err）在漏检与多调大模型之间折中。语法与混合难例上不如拼写稳，更适合省算力而非单独替代大模型。在 A100、较大 batch（如 512～1024）、`max_length=256` 等设置下，纯 GPU 前向可达约 100+ 句/秒量级；具体以本模型验证与线上实测为准。
 
 ### 输入输出（与主仓库对齐）
 
