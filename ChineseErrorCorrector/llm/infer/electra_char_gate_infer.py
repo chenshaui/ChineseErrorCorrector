@@ -35,15 +35,36 @@ import torch
 import torch.nn.functional as F
 from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-from ChineseErrorCorrector.config import DEVICE
+from ChineseErrorCorrector.config import DEVICE, TextCorrectConfig
 
-# 与 Hugging Face 模型卡 URL 一致：`https://huggingface.co/{CHAR_GATE_HF_REPO_ID}`
-# 发布到 Hub 后请改为实际上传的 ``用户名或组织名/仓库名``（与本文件同目录说明 md 同步修改）。
+# 与 Hugging Face 模型卡 URL 一致：`https://huggingface.co/{CHAR_GATE_HF_REPO_ID}`。
+# 若 config.py 中提供 TextCorrectConfig.DEFAULT_DETECTOR_PATH，本文件会优先使用配置值。
 CHAR_GATE_HF_REPO_ID = os.environ.get(
     "CHAR_GATE_HF_REPO_ID",
     "username/chinese-char-error-detector-electra",
 )
 CHAR_GATE_MODEL_CARD_URL = f"https://huggingface.co/{CHAR_GATE_HF_REPO_ID}"
+
+
+def is_detector_enabled() -> bool:
+    """是否启用 detector（用于主流程判断）。默认 True 以兼容旧配置。"""
+    return bool(getattr(TextCorrectConfig, "USE_DETECTOR", True))
+
+
+def get_default_detector_path() -> str:
+    """
+    detector 模型路径解析优先级：
+      1) 环境变量 CHAR_GATE_HF_REPO_ID
+      2) TextCorrectConfig.DEFAULT_DETECTOR_PATH
+      3) CHAR_GATE_HF_REPO_ID（模块默认）
+    """
+    env_repo = os.environ.get("CHAR_GATE_HF_REPO_ID")
+    if env_repo:
+        return env_repo
+    cfg_path = getattr(TextCorrectConfig, "DEFAULT_DETECTOR_PATH", None)
+    if isinstance(cfg_path, str) and cfg_path.strip():
+        return cfg_path.strip()
+    return CHAR_GATE_HF_REPO_ID
 
 
 def _normalize_text(text: str) -> str:
@@ -143,7 +164,7 @@ class ElectraCharGateInfer:
 
     def __init__(
         self,
-        model_name_or_path: str,
+        model_name_or_path: str | None = None,
         *,
         device: str | torch.device | None = None,
         max_length: int = 256,
@@ -156,10 +177,17 @@ class ElectraCharGateInfer:
         dev = device if device is not None else DEVICE
         self._device = torch.device(dev)
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, use_fast=True)
+        resolved_model = model_name_or_path or get_default_detector_path()
+        if not resolved_model:
+            raise RuntimeError(
+                "未提供 detector 模型路径。请在 TextCorrectConfig.DEFAULT_DETECTOR_PATH 配置，"
+                "或在初始化 ElectraCharGateInfer 时传 model_name_or_path。"
+            )
+
+        self.tokenizer = AutoTokenizer.from_pretrained(resolved_model, use_fast=True)
         if not getattr(self.tokenizer, "is_fast", False):
             raise RuntimeError("字级门控需要 Fast tokenizer（return_offsets_mapping）")
-        self.model = AutoModelForTokenClassification.from_pretrained(model_name_or_path)
+        self.model = AutoModelForTokenClassification.from_pretrained(resolved_model)
         self.model.eval().to(self._device)
 
     def infer(self, input_list: list[str]) -> list[dict[str, Any]]:
