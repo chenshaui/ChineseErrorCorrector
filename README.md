@@ -218,6 +218,8 @@ for output in outputs:
 
 ### 👍 VLLM 异步批量推理(工程推荐)
 
+本仓库的推理主链路通过 OpenAI 兼容接口调用 4B 大模型，需要先用 vLLM 启动模型服务，再通过 `config.py` 配置接口地址即可使用。
+
 - Clone the repo
 
 ``` sh
@@ -235,7 +237,9 @@ pip install -r requirements.txt
 # If you are in mainland China, you can set the mirror as follows:
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 ```
-方法一：直接启动VLLM服务，使用openai接口进行调用，只输出正确语句，部署脚本：
+
+使用 vLLM 启动 4B 大模型（OpenAI 兼容接口）：
+
 ``` sh
 CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector3-4B \
     --port 8000 \
@@ -244,38 +248,21 @@ CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector3-4B \
     --seed 42 \
     >chinese_corrector.log 2>&1 &
 ```
-cURL 调用（openai格式）
-``` sh
-curl http://localhost:8000/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "twnlp/ChineseErrorCorrector3-4B",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：对待每一项工作都要一丝不够。"
-      }
-    ],
-    "max_tokens": 1024,
-    "temperature": 0,
-    "seed": 42
-  }'
-```
 
-方法二：使用 ChineseErrorCorrector 本仓库推理，有对应的后处理操作（不再本地加载 4B 权重，全部走上面的 OpenAI 接口）。
+在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量 `CEC_OPENAI_BASE_URL` / `CEC_OPENAI_API_KEY` / `CEC_OPENAI_MODEL` 覆盖）：
+
+| 配置项 | 默认值 | 说明 |
+|---|---|---|
+| `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址 |
+| `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验 |
+| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector3-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
+
+批量预测：
+
 ```sh
-# 启动 vLLM serve（同上），然后在 config.py 中按需修改：
-#（1）TextCorrectConfig.OPENAI_BASE_URL：OpenAI 兼容服务地址，默认 http://localhost:8000/v1
-#（2）TextCorrectConfig.OPENAI_API_KEY：API Key，默认 EMPTY（vLLM serve 不校验）
-#（3）TextCorrectConfig.OPENAI_MODEL：模型名，默认 twnlp/ChineseErrorCorrector3-4B
-# 也可用环境变量 CEC_OPENAI_BASE_URL / CEC_OPENAI_API_KEY / CEC_OPENAI_MODEL 覆盖。
-
-# 批量预测
 python main.py
 # 输出：
-'''
-[{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
-'''
+# [{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
 ```
 
 ### 🤖 modelscope
