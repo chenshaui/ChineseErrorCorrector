@@ -13,19 +13,43 @@ class LTPPath(object):
     LTP_MODEL_DIR = os.path.join(MODEL_DIR, 'ltp_tiny')
     LTP_DATA_PATH = os.path.join(DATA_DIR, 'dat_data')
 
-class StanzaPath(object):
-    STANZA_DATA_PATH = os.path.join(DATA_DIR, 'stanza','stanza_resources_1.7.0.json')
 
-# 需要将ChineseErrorCorrector3-4B下载下来，放在pre_model中
+class StanzaPath(object):
+    STANZA_DATA_PATH = os.path.join(DATA_DIR, 'stanza', 'stanza_resources_1.7.0.json')
+
+
 class TextCorrectConfig(object):
     """
-    模型位置
+    纠错主链路：通过 OpenAI 兼容接口调用部署好的 4B 大模型（例如本地 vLLM serve）。
+    本仓库的推理代码不再直接加载 4B 大模型权重，所有生成请求都走 HTTP / OpenAI SDK。
     """
-    # 是否采用VLLM进行异步推理，工程化推荐
-    USE_VLLM = False
-    MAX_LENGTH = 32000
-    DEFAULT_CKPT_PATH = os.path.join(MODEL_DIR, 'ChineseErrorCorrector3-4B')
-    GPU_MEMARY = 0.9
+
+    # ---- 4B 大模型 OpenAI 接口（必选） ----
+    # vLLM serve 默认即为 OpenAI 兼容接口，可配合 README 中给出的部署脚本使用。
+    OPENAI_BASE_URL = os.environ.get("CEC_OPENAI_BASE_URL", "http://localhost:8000/v1")
+    OPENAI_API_KEY = os.environ.get("CEC_OPENAI_API_KEY", "EMPTY")
+    OPENAI_MODEL = os.environ.get("CEC_OPENAI_MODEL", "twnlp/ChineseErrorCorrector3-4B")
+
+    # 生成参数
+    MAX_TOKENS = 1024
+    TEMPERATURE = 0
+    SEED = 42
+    # 并发请求数（异步批量推理时使用）
+    CONCURRENCY = 16
+    # 单次请求超时（秒）
+    REQUEST_TIMEOUT = 60
+
+    # ---- ELECTRA 字级门控（可选，默认关闭） ----
+    # 启用后，会先用轻量 ELECTRA 判别器筛掉「明显无错」的句子，仅对需要纠错的句子调用大模型。
+    # 详细说明见 ChineseErrorCorrector/README_ELECTRA.md。
+    USE_DETECTOR = False
+    DEFAULT_DETECTOR_PATH = os.environ.get(
+        "CHAR_GATE_HF_REPO_ID",
+        "username/chinese-char-error-detector-electra",
+    )
+    DETECTOR_SENTENCE_THRESHOLD = 0.5
+    DETECTOR_MAX_LENGTH = 256
+    DETECTOR_BATCH_SIZE = 32
 
 
 class TrainConfig(object):
