@@ -1,5 +1,4 @@
-# Claude Code 本地工作目录（含 worktrees、缓存等）
-.claude/
+
 
 # Python
 __pycache__/
