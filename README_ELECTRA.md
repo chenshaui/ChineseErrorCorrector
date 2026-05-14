@@ -4,22 +4,25 @@
 
 权重使用独立的 Hugging Face 模型或本地目录（与主仓库默认纠错权重无关）。需要 Fast tokenizer（`use_fast=True`，支持 offset_mapping）。基座与社区常用骨干一致：[hfl/chinese-electra-180g-base-discriminator](https://huggingface.co/hfl/chinese-electra-180g-base-discriminator)。
 
-**字级门控默认权重（与代码中 `CHAR_GATE_HF_REPO_ID` 一致，发布前请改为你的实际上传路径）**：[模型卡](https://huggingface.co/username/chinese-char-error-detector-electra) · 仓库 id `username/chinese-char-error-detector-electra`。也可设置环境变量 `CHAR_GATE_HF_REPO_ID` 覆盖默认 id；本地 `save_pretrained` 目录可直接传给 `ElectraCharGateInfer(model_name_or_path=...)`。
+**官方权重（推荐）**：[xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra)。
 
 **数据与复现材料（Hugging Face）**
-字级对齐后的训练/验证数据、生成方式说明，以及本地一键脚本对应的用法与字段说明，均已整理并发布在 Hugging Face Hub 仓库 xurong123/ChineseErrorDetectorElectra：内含可复用的数据说明、样例与相关脚本入口，便于直接 datasets 加载或对照本仓库代码复现预处理流程。详见：https://huggingface.co/xurong123/ChineseErrorDetectorElectra。
+字级对齐后的训练/验证数据、生成方式说明，以及本地一键脚本对应的用法与字段说明，均已整理并发布在 Hugging Face Hub 仓库 [xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra)：内含可复用的数据说明、样例与相关脚本入口，便于直接 datasets 加载或对照本仓库代码复现预处理流程。
 
 ## 启用方式
 
-ELECTRA 门控默认关闭。在 `ChineseErrorCorrector/config.py` 中将 `TextCorrectConfig.USE_DETECTOR` 设为 `True` 即可启用，主链路（`ErrorCorrect.infer`）会先用门控筛句、再仅对 `need_correct == True` 的句子调用 4B 大模型 OpenAI 接口。其余可调项：
+1. **下载权重**：从 [xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra) 下载，**推荐**放到 `ChineseErrorCorrector/pre_model/ChineseErrorDetectorElectra/` 下（即 `config.py` 中 `DEFAULT_DETECTOR_PATH` 的默认路径）。也可设置环境变量 `CHAR_GATE_HF_REPO_ID` 指向其他本地路径或 HF 仓库 id 走在线加载。
+2. **打开开关**：在 `ChineseErrorCorrector/config.py` 中把 `TextCorrectConfig.USE_DETECTOR` 改为 `True`，主链路（`ErrorCorrect.infer`）会先用门控筛句、再仅对 `need_correct == True` 的句子调用 4B 大模型 OpenAI 接口。
 
-| 配置项 | 说明 |
-|---|---|
-| `USE_DETECTOR` | 是否启用 ELECTRA 字级门控，默认 `False` |
-| `DEFAULT_DETECTOR_PATH` | 门控模型路径或 HF 仓库 id，可用环境变量 `CHAR_GATE_HF_REPO_ID` 覆盖 |
-| `DETECTOR_SENTENCE_THRESHOLD` | 句级阈值（`max_p_err`），默认 `0.5` |
-| `DETECTOR_MAX_LENGTH` | 最大序列长度，默认 `256` |
-| `DETECTOR_BATCH_SIZE` | 门控 batch size，默认 `32` |
+可调项：
+
+| 配置项 | 默认值 | 说明 |
+|---|---|---|
+| `USE_DETECTOR` | `False` | 是否启用 ELECTRA 字级门控 |
+| `DEFAULT_DETECTOR_PATH` | `ChineseErrorCorrector/pre_model/ChineseErrorDetectorElectra` | 门控模型本地路径或 HF 仓库 id，可用环境变量 `CHAR_GATE_HF_REPO_ID` 覆盖 |
+| `DETECTOR_SENTENCE_THRESHOLD` | `0.5` | 句级阈值（`max_p_err`） |
+| `DETECTOR_MAX_LENGTH` | `256` | 最大序列长度 |
+| `DETECTOR_BATCH_SIZE` | `32` | 门控 batch size |
 
 ## 加速思路
 
