@@ -41,11 +41,16 @@ class TextCorrectConfig(object):
 
     # ---- ELECTRA 字级门控（可选，默认关闭） ----
     # 启用后，会先用轻量 ELECTRA 判别器筛掉「明显无错」的句子，仅对需要纠错的句子调用大模型。
-    # 详细说明见 ChineseErrorCorrector/README_ELECTRA.md。
+    # 详细说明见 README_ELECTRA.md。
+    #
+    # 模型下载与放置（推荐）：
+    #   1) 从 https://huggingface.co/xurong123/ChineseErrorDetectorElectra 下载权重
+    #   2) 放到 ChineseErrorCorrector/pre_model/ChineseErrorDetectorElectra/ 下（即下方默认路径）
+    #   3) 也可设置环境变量 CHAR_GATE_HF_REPO_ID 覆盖，或直接填 HF 仓库 id 走在线加载
     USE_DETECTOR = False
     DEFAULT_DETECTOR_PATH = os.environ.get(
         "CHAR_GATE_HF_REPO_ID",
-        "username/chinese-char-error-detector-electra",
+        os.path.join(MODEL_DIR, "ChineseErrorDetectorElectra"),
     )
     DETECTOR_SENTENCE_THRESHOLD = 0.5
     DETECTOR_MAX_LENGTH = 256
