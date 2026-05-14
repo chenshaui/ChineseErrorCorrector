@@ -1,6 +1,6 @@
 """
 轻量字级「是否可能出错」推理头（ELECTRA TokenClassification），与主仓库
-`ErrorCorrect.hf_infer / vllm_infer` 的输入形式一致：list[str] 原句。
+`ErrorCorrect.infer` 的输入形式一致：list[str] 原句。
 
 输出为结构化 dict（`source`、`text`、`need_correct`、`max_p_err`、`char_flags`、`char_end`），
 便于在大模型纠错前做门控。
@@ -47,8 +47,8 @@ CHAR_GATE_MODEL_CARD_URL = f"https://huggingface.co/{CHAR_GATE_HF_REPO_ID}"
 
 
 def is_detector_enabled() -> bool:
-    """是否启用 detector（用于主流程判断）。默认 True 以兼容旧配置。"""
-    return bool(getattr(TextCorrectConfig, "USE_DETECTOR", True))
+    """是否启用 detector（用于主流程判断）。默认 False，由 config.USE_DETECTOR 决定。"""
+    return bool(getattr(TextCorrectConfig, "USE_DETECTOR", False))
 
 
 def get_default_detector_path() -> str:
