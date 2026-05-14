@@ -359,6 +359,9 @@ print(response)
 
 **字级门控默认权重（与代码中 `CHAR_GATE_HF_REPO_ID` 一致，发布前请改为你的实际上传路径）**：[模型卡](https://huggingface.co/username/chinese-char-error-detector-electra) · 仓库 id `username/chinese-char-error-detector-electra`。也可设置环境变量 `CHAR_GATE_HF_REPO_ID` 覆盖默认 id；本地 `save_pretrained` 目录可直接传给 `ElectraCharGateInfer(model_name_or_path=...)`。
 
+**数据与复现材料（Hugging Face）**
+字级对齐后的训练/验证数据、生成方式说明，以及本地一键脚本对应的用法与字段说明，均已整理并发布在 Hugging Face Hub 仓库 xurong123/ChineseErrorDetectorElectra：内含可复用的数据说明、样例与相关脚本入口，便于直接 datasets 加载或对照本仓库代码复现预处理流程。详见：https://huggingface.co/xurong123/ChineseErrorDetectorElectra。
+
 ### 加速思路
 
 门控侧参数量远小于 4B/7B 纠错模型，且实现支持 padding batch（`batch_size` 可调）。仅对 `need_correct == True` 的句子跑 hf_infer 或 vllm_infer，无错或风险低的句子不再走自回归生成；实际收益取决于数据中无需纠错的比例、门控阈值和大模型 batch 策略，主要来自减少生成次数。
