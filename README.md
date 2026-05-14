@@ -31,7 +31,7 @@
 | 模块 | 能力 | 入口 |
 |:--|:--|:--|
 | 🎓 **学术研究** | ACL 2026 Main 论文（ChineseErrorCorrector4-4B，整理中）+ ChineseErrorCorrector3-4B 论文 + 持续更新的中文纠错论文集 | [ChineseErrorCorrector3-4B 论文](https://arxiv.org/abs/2511.17562) · [论文清单](README_paper.md) |
-| 📏 **模型评测** | Common Errant：覆盖 80 种语言的通用文本纠错评测工具，高/低资源语言均可 | [评测工具文档](ChineseErrorCorrector/scores/README.md) · [泛化性评测榜单](#-evaluation) |
+| 📏 **模型评测** | Common Errant：覆盖 80 种语言的通用文本纠错评测工具，高/低资源语言均可 | [评测工具文档](ChineseErrorCorrector/scores/README.md)  |
 | 🚀 **推理部署** | ChineseErrorCorrector3-4B + OpenAI 兼容接口（vLLM serve）+ 可选 ELECTRA 字级门控加速 | [快速开始](#-快速开始推理部署) · [ELECTRA 说明](README_ELECTRA.md) |
 | 🧪 **数据增强** | `pip install ChineseErrorCorrector`：14 种语法错误一键增强（2024 CCL 冠军方案） | [PyPI](https://pypi.org/project/ChineseErrorCorrector/) · [使用文档](ChineseErrorCorrector/README_DAT.md) |
 | 🤖 **模型训练** | 推荐使用 [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) 在本仓库提供的 [200 万纠错数据集](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) 上微调私有领域模型 | [训练说明](#-模型训练推荐-llama-factory) |
