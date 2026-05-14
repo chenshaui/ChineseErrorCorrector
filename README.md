@@ -398,7 +398,7 @@ If this work is helpful, please kindly cite as（**ChineseErrorCorrector3-4B 论
 
 **微信：** NLP技术交流群。
 
-<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/chat_.jpg" width="200" />
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/chat.jpg" width="200" />
 
 
 ## References
