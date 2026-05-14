@@ -1,0 +1,48 @@
+# Claude Code 本地工作目录（含 worktrees、缓存等）
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual env
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 本地模型权重 / 大文件目录（用户自行下载，按需放置）
+ChineseErrorCorrector/pre_model/ChineseErrorCorrector*-4B/
+ChineseErrorCorrector/pre_model/ChineseErrorCorrector*-7B/
+ChineseErrorCorrector/pre_model/ChineseErrorDetectorElectra/
+
+# 日志
+*.log
