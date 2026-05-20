@@ -237,12 +237,14 @@ pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --tru
 使用 vLLM 启动 4B 大模型（OpenAI 兼容接口）：
 
 ```sh
+# v4（推荐）
 CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector4-4B \
     --port 8000 \
-    --max-model-len 1024 \
+    --max-model-len 2048 \
     --gpu-memory-utilization 0.9 \
     --seed 42 \
     >chinese_corrector.log 2>&1 &
+# 想用 v3：把模型名替换为 twnlp/ChineseErrorCorrector3-4B 即可，--max-model-len 1024 够用
 ```
 
 在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量 `CEC_OPENAI_BASE_URL` / `CEC_OPENAI_API_KEY` / `CEC_OPENAI_MODEL` 覆盖）：
@@ -251,7 +253,9 @@ CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector4-4B \
 |:------|:------|:----|
 | `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址 |
 | `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验 |
-| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector3-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
+| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector4-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
+
+> 本仓库会按 `OPENAI_MODEL` 名字自动判定 v3/v4（名字含 `4-4B` / `Corrector4` 视为 v4），自动适配 prompt 并剥掉 v4 输出里的 `<think>...</think>` 思考块；对外接口与返回结构 v3/v4 一致。如需手动指定，可改 `MODEL_VERSION`（`auto`/`v3`/`v4`）。
 
 批量预测：
 
