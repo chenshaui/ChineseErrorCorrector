@@ -27,13 +27,13 @@
 
 ### ✨ 平台四大支柱 + 训练入口
 
-| 模块   | 能力 | 入口 |
-|:--  |:--|:--|
-| 🎓 **学术研究** | ACL 2026 Main 论文（ChineseErrorCorrector4-4B）+ ChineseErrorCorrector3-4B 论文 + 持续更新的中文纠错论文集 |  [论文清单](README_paper.md) |
-| 📏 **模型评测** | Common Errant：覆盖 80 种语言的通用文本纠错评测工具，高/低资源语言均可 | [评测工具文档](ChineseErrorCorrector/scores/README.md)  |
-| 🚀 **推理部署** | ChineseErrorCorrector4-4B + OpenAI 兼容接口（vLLM serve）+ 可选 ELECTRA 字级门控加速 | [快速开始](#-快速开始推理部署) · [ELECTRA 说明](README_ELECTRA.md) |
-| 🧪 **数据增强** | `pip install ChineseErrorCorrector`：14 种语法错误一键增强（2024 CCL 冠军方案） | [PyPI](https://pypi.org/project/ChineseErrorCorrector/) · [使用文档](ChineseErrorCorrector/README_DAT.md) |
-| 🤖 **模型训练** | 推荐使用 [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) 在本仓库提供的 [34万COT数据集](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B) [200万常规监督数据集](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) 上微调私有领域模型 | [训练说明](#-模型训练推荐-llama-factory) |
+| 模块 | 能力 | 入口 |
+|:--|:--|:--|
+| 🎓 **学术研究** | 持续更新的中文纠错论文集 |  [论文清单](README_paper.md) |
+| 📏 **模型评测** | Common Errant：覆盖 80 种语言的通用文本纠错评测工具 | [评测工具文档](ChineseErrorCorrector/scores/README.md)  |
+| 🚀 **推理部署** | ChineseErrorCorrector系列模型 + 可选 ELECTRA 字级门控加速 | [快速开始](#-快速开始推理部署) · [ELECTRA 说明](README_ELECTRA.md) |
+| 🧪 **数据增强** | 14 种语法错误一键增强（2024 CCL 冠军方案），获得行业监督数据 | [PyPI](https://pypi.org/project/ChineseErrorCorrector/) · [使用文档](ChineseErrorCorrector/README_DAT.md) |
+| 🤖 **模型训练** | 开源大规模高质量数据： [34万COT](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B) 、[200万监督数据](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) 等。| [训练说明](#-模型训练推荐-llama-factory) |
 
 ## 🔥🔥🔥 新闻
 
@@ -80,7 +80,7 @@
 
 | 模型名称 | 纠错类型 | 状态 | 描述 |
 |:--------|:--------|:-----|:----|
-| [**twnlp/ChineseErrorCorrector4-4B**](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B) | 语法+拼写 | ✅ **已开源（当前 SOTA，推荐）** 🔥 | ACL 2026 Main 论文模型。NACGEC $F_{0.5}$ = **50.99**，CSCD Correction F1 = **59.61**，双榜刷新 SOTA，全面超越 GPT-4。 |
+| [**twnlp/ChineseErrorCorrector4-4B**](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B) | 语法+拼写 | ✅ **已开源** 🔥 | ACL 2026 Main 论文模型。NACGEC $F_{0.5}$ = **50.99**，CSCD Correction F1 = **59.61**，双榜刷新 SOTA，全面超越 GPT-4。 |
 | [twnlp/ChineseErrorCorrector3-4B](https://huggingface.co/twnlp/ChineseErrorCorrector3-4B) | 语法+拼写 | ✅ 已开源 | 使用200万纠错数据进行全量训练，适用于语法纠错和拼写纠错，效果较好。 |
 | [twnlp/ChineseErrorCorrector2-7B](https://huggingface.co/twnlp/ChineseErrorCorrector2-7B) | 语法+拼写 | ✅ 已开源 | 使用200万纠错数据进行多轮迭代训练，适用于语法纠错和拼写纠错，效果较好。 |
 | [twnlp/ChineseErrorCorrector-7B](https://huggingface.co/twnlp/ChineseErrorCorrector-7B) | 拼写 | ✅ 已开源 | 使用38万开源拼写数据，支持语似、形似等拼写错误纠正，拼写纠错效果好。 |
@@ -99,9 +99,11 @@
 
 ## 🏗️ Evaluation
 
-本节榜单基于本平台开源的 **Common Errant（[scores 模块](ChineseErrorCorrector/scores/README.md)）** 评测——一套覆盖 80 种语言的通用文本纠错评测工具，可在中文、英文等高资源语言，以及印地语、孟加拉语等低资源语言上统一评测。
+为了验证ChineseErrorCorrector系列模型的有效性，我们从泛化性和专业性两个方面进行了全面的对比，都为业界的**Sota**。
 
-### 泛化性评测
+说明：泛化性评测 为[pycorrector](https://github.com/shibing624/pycorrector)提出的评测榜单，专业性评测是顶会论文中公认的评测数据集。
+
+### 1、泛化性评测
 - 评估指标：F1
 - CSC(Chinese Spelling Correction): 拼写纠错模型，表示模型可以处理音似、形似、语法等长度对齐的错误纠正
 - CTC(Chinese Text Correction): 文本纠错模型，表示模型支持拼写、语法等长度对齐的错误纠正，还可以处理多字、少字等长度不对齐的错误纠正
@@ -117,9 +119,8 @@
 | Qwen2.5-1.5B-CTC | [shibing624/chinese-text-correction-1.5b](https://huggingface.co/shibing624/chinese-text-correction-1.5b) | Qwen/Qwen2.5-1.5B-Instruct | 0.6802 | 0.3032 | 0.7846 | 0.9529 | GPU | 6 |
 | Qwen2.5-7B-CTC | [shibing624/chinese-text-correction-7b](https://huggingface.co/shibing624/chinese-text-correction-7b) | Qwen/Qwen2.5-7B-Instruct | 0.8225 | 0.4917 | 0.9798 | 0.9959 | GPU | 3 |
 | Qwen3-4B-CTC (CEC3) | [twnlp/ChineseErrorCorrector3-4B](https://huggingface.co/twnlp/ChineseErrorCorrector3-4B) | Qwen/Qwen3-4B | 0.8521 | 0.6340 | 0.9360 | 0.9864 | GPU | 5 |
-| **Qwen3-4B-CTC (CEC4, Our)** | [twnlp/ChineseErrorCorrector4-4B](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B) | Qwen/Qwen3-4B | — | — | — | — | GPU | — |
 
-### 语法纠错（三冠王 🏆）
+### 2、语法纠错（两个权威数据集Sota）
 
 #### NaCGEC 数据集 🏆
 
@@ -135,10 +136,6 @@
 | 鱼饼啾啾Plus（北京大学） | 未开源 | 0.5708 | 0.1294 | 0.3394 |
 | CUHK_SU（香港中文大学） | 未开源 | 0.3882 | 0.1558 | 0.2990 |
 
-#### FCGEC 数据集 🏆
-
-- 评估指标：binary_f1
-- [评测🔗](https://codalab.lisn.upsaclay.fr/competitions/8020#results)
 
 #### CSCD 数据集 🏆（拼写检查新 SOTA）
 
@@ -156,10 +153,9 @@
   <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="400">
 </div>
 
-本仓库提供 4 种推理调用方式，覆盖单机调试、工程化部署、国内镜像三类场景：
+本仓库提供 3 种推理调用方式，覆盖单机调试、工程化部署、国内镜像三类场景：
 
 - **🤗 transformers**：单机本地推理，适合调试与小规模评测。
-- **VLLM 单机调用**：本地高性能推理脚本。
 - **👍 VLLM 异步批量推理（工程推荐）**：通过 OpenAI 兼容接口 + 本仓库 `main.py` 后处理，工程化首选。
 - **🤖 modelscope**：国内用户镜像下载。
 
@@ -214,37 +210,11 @@ response = tokenizer.decode(
 print(response)
 ```
 
-### VLLM
 
-```shell
-pip install -U transformers
-pip install vllm>=0.8.5
-```
 
-```python
-from transformers import AutoTokenizer
-from vllm import LLM, SamplingParams
+### 👍 VLLM 异步批量推理（工程推荐）
 
-tokenizer = AutoTokenizer.from_pretrained("twnlp/ChineseErrorCorrector4-4B")
-sampling_params = SamplingParams(seed=42, max_tokens=512)
-llm = LLM(model="twnlp/ChineseErrorCorrector4-4B")
-
-text_input = "对待每一项工作都要一丝不够。"
-messages = [
-    {"role": "user", "content": "你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：" + text_input}
-]
-text = tokenizer.apply_chat_template(
-    messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
-)
-
-outputs = llm.generate([text], sampling_params)
-for output in outputs:
-    print(output.outputs[0].text)
-```
-
-### 👍 VLLM 异步批量推理（工程推荐，同时兼容 ChineseErrorCorrector4-4B / 3-4B）
-
-本仓库的推理主链路通过 OpenAI 兼容接口调用 4B 大模型，需要先用 vLLM 启动模型服务，再通过 `config.py` 配置接口地址即可使用。**v3 / v4 两代模型的 prompt 与输出格式不同**（v4 输出含 `<think>...</think>` 思考块），本仓库会**根据模型名自动选 prompt、自动剥掉思考块**，对外接口与返回结构保持一致。
+本仓库的推理主链路通过 OpenAI 兼容接口调用 4B 大模型，需要先用 vLLM 启动模型服务，再通过 `config.py` 配置接口地址即可使用。
 
 - Clone the repo
 
@@ -264,45 +234,30 @@ pip install -r requirements.txt
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 ```
 
-使用 vLLM 启动 4B 大模型（OpenAI 兼容接口，**推荐 v4**）：
+使用 vLLM 启动 4B 大模型（OpenAI 兼容接口）：
 
 ```sh
-# v4（推荐，当前 SOTA）
 CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector4-4B \
     --port 8000 \
-    --max-model-len 2048 \
+    --max-model-len 1024 \
     --gpu-memory-utilization 0.9 \
     --seed 42 \
     >chinese_corrector.log 2>&1 &
-
-# 或者使用 v3（上一代）
-# CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector3-4B --port 8000 --max-model-len 1024 ... &
 ```
 
-在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量覆盖）：
+在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量 `CEC_OPENAI_BASE_URL` / `CEC_OPENAI_API_KEY` / `CEC_OPENAI_MODEL` 覆盖）：
 
 | 配置项 | 默认值 | 说明 |
 |:------|:------|:----|
-| `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址；环境变量 `CEC_OPENAI_BASE_URL` |
-| `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验；环境变量 `CEC_OPENAI_API_KEY` |
-| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector4-4B` | 模型名，需与 `vllm serve` 加载的模型一致；环境变量 `CEC_OPENAI_MODEL` |
-| `MODEL_VERSION` | `auto` | `auto`：按模型名自动判定 v3/v4；也可手动设 `v3` / `v4`；环境变量 `CEC_MODEL_VERSION` |
-| `MAX_TOKENS` | `2048` | v4 输出含 `<think>` 段，建议 ≥ 1024 |
-
-**v3 / v4 prompt 自动适配规则**：
-
-| 条件 | 选用版本 | Prompt |
-|:--|:--|:--|
-| `OPENAI_MODEL` 包含 `4-4B` / `Corrector4` / `CEC4`（不区分大小写） | v4 | `假如你是一名专业的纠错专家，请分析输入句子的语法错误类型和修改原因，并只输出纠正后的语句，错误类型如下：错别字、词语搭配错误...` |
-| 其余 | v3 | `你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：` |
-
-若自动判定不准（例如自定义模型名），可在 `config.py` 中把 `MODEL_VERSION` 显式设为 `"v3"` 或 `"v4"`。
+| `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址 |
+| `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验 |
+| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector3-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
 
 批量预测：
 
 ```sh
 python main.py
-# 输出（v3、v4 返回结构完全一致，v4 的 <think>...</think> 已自动剥离）：
+# 输出：
 # [{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
 ```
 
@@ -310,7 +265,7 @@ python main.py
 
 主链路默认仅调用 4B 大模型 OpenAI 接口。若希望在调用大模型前先过滤明显无错的句子以省算力、降延迟，可启用可选的 ELECTRA 字级判别器门控：在 `ChineseErrorCorrector/config.py` 中将 `TextCorrectConfig.USE_DETECTOR` 设为 `True` 即可，模型、阈值、batch 等细节、性能数据、训练/验证语料与示例代码均见单独文档：[README_ELECTRA.md](README_ELECTRA.md)。
 
-## 🧪 数据增强（PyPI 包 · 2024 CCL 冠军方案）
+## 数据增强（PyPI 包 · 2024 CCL 冠军方案）
 
 开源「一键语法错误增强工具」，支持 **14 种语法错误增强**，可在任意行业数据上合成训练语料，是 **2024 CCL 冠军方案** 的核心组件。
 
