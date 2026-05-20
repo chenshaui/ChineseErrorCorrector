@@ -255,14 +255,23 @@ CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector4-4B \
 | `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验 |
 | `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector4-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
 
-> 本仓库会按 `OPENAI_MODEL` 名字自动判定 v3/v4（名字含 `4-4B` / `Corrector4` 视为 v4），自动适配 prompt 并剥掉 v4 输出里的 `<think>...</think>` 思考块；对外接口与返回结构 v3/v4 一致。如需手动指定，可改 `MODEL_VERSION`（`auto`/`v3`/`v4`）。
+> 本仓库会按 `OPENAI_MODEL` 名字自动判定 v3/v4（名字含 `4-4B` / `Corrector4` 视为 v4），自动适配 prompt 并解析 v4 输出里的 `<think>...</think>` 思考块；对外接口 v3/v4 一致，v4 时返回结果会额外携带**错误类型**与**修改原因**字段（v3 则为 `None`）。如需手动指定版本，可改 `MODEL_VERSION`（`auto`/`v3`/`v4`）。
 
 批量预测：
 
 ```sh
 python main.py
-# 输出：
-# [{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
+# v3 输出（error_type / error_reason 为 None）：
+# [{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。',
+#   'errors': [('够', '苟', 12)], 'error_type': None, 'error_reason': None},
+#  {'source': '大约半个小时左右', 'target': '大约半个小时',
+#   'errors': [('左右', '', 6)], 'error_type': None, 'error_reason': None}]
+
+# v4 输出（额外带 error_type / error_reason）：
+# [{'source': '下个星期，我跟我朋唷打算去法国玩儿。', 'target': '下个星期，我跟我朋友打算去法国玩儿。',
+#   'errors': [('唷', '友', 8)],
+#   'error_type': '错别字',
+#   'error_reason': '原句中的"朋唷"应为"朋友"，"唷"是语气助词，不能用于表示同伴的词语中，属于同音字误用...'}]
 ```
 
 ## ELECTRA 字级门控（可选）
