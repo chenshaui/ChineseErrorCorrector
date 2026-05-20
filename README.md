@@ -24,18 +24,16 @@
 
 🏆 荣获 **2026 ACL Main**（ChineseErrorCorrector4-4B）🎉 · [2024 CCL 冠军](https://aclanthology.org/2024.ccl-3.31/) · [2023 NLPCC-NaCGEC 纠错冠军](#nacgec-数据集-) · [2022 FCGEC 纠错冠军](#fcgec-数据集-)，如有帮助，感谢 Star ✨。
 
-> 🚀 **当前 SOTA（推荐使用）**：[ChineseErrorCorrector4-4B](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B)（**ACL 2026 Main**，NACGEC & CSCD 双榜 SOTA）。
-> 📦 上一代稳定版：[ChineseErrorCorrector3-4B](https://huggingface.co/twnlp/ChineseErrorCorrector3-4B)（2025 年发布，[arXiv:2511.17562](https://arxiv.org/abs/2511.17562)）。
 
 ### ✨ 平台四大支柱 + 训练入口
 
-| 模块 | 能力 | 入口 |
-|:--|:--|:--|
-| 🎓 **学术研究** | ACL 2026 Main 论文（ChineseErrorCorrector4-4B）+ ChineseErrorCorrector3-4B 论文 + 持续更新的中文纠错论文集 | [ChineseErrorCorrector3-4B 论文](https://arxiv.org/abs/2511.17562) · [论文清单](README_paper.md) |
+| 模块   | 能力 | 入口 |
+|:--  |:--|:--|
+| 🎓 **学术研究** | ACL 2026 Main 论文（ChineseErrorCorrector4-4B）+ ChineseErrorCorrector3-4B 论文 + 持续更新的中文纠错论文集 |  [论文清单](README_paper.md) |
 | 📏 **模型评测** | Common Errant：覆盖 80 种语言的通用文本纠错评测工具，高/低资源语言均可 | [评测工具文档](ChineseErrorCorrector/scores/README.md)  |
 | 🚀 **推理部署** | ChineseErrorCorrector4-4B + OpenAI 兼容接口（vLLM serve）+ 可选 ELECTRA 字级门控加速 | [快速开始](#-快速开始推理部署) · [ELECTRA 说明](README_ELECTRA.md) |
 | 🧪 **数据增强** | `pip install ChineseErrorCorrector`：14 种语法错误一键增强（2024 CCL 冠军方案） | [PyPI](https://pypi.org/project/ChineseErrorCorrector/) · [使用文档](ChineseErrorCorrector/README_DAT.md) |
-| 🤖 **模型训练** | 推荐使用 [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) 在本仓库提供的 [200 万纠错数据集](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) 上微调私有领域模型 | [训练说明](#-模型训练推荐-llama-factory) |
+| 🤖 **模型训练** | 推荐使用 [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) 在本仓库提供的 [34万COT数据集](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B) [200万常规监督数据集](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) 上微调私有领域模型 | [训练说明](#-模型训练推荐-llama-factory) |
 
 ## 🔥🔥🔥 新闻
 
@@ -220,7 +218,7 @@ print(response)
 
 ```shell
 pip install -U transformers
-pip install vllm==0.8.5
+pip install vllm>=0.8.5
 ```
 
 ```python
@@ -244,9 +242,9 @@ for output in outputs:
     print(output.outputs[0].text)
 ```
 
-### 👍 VLLM 异步批量推理（工程推荐， 目前正在支持ChineseErrorCorrector4）
+### 👍 VLLM 异步批量推理（工程推荐，同时兼容 ChineseErrorCorrector4-4B / 3-4B）
 
-本仓库的推理主链路通过 OpenAI 兼容接口调用 4B 大模型，需要先用 vLLM 启动模型服务，再通过 `config.py` 配置接口地址即可使用。
+本仓库的推理主链路通过 OpenAI 兼容接口调用 4B 大模型，需要先用 vLLM 启动模型服务，再通过 `config.py` 配置接口地址即可使用。**v3 / v4 两代模型的 prompt 与输出格式不同**（v4 输出含 `<think>...</think>` 思考块），本仓库会**根据模型名自动选 prompt、自动剥掉思考块**，对外接口与返回结构保持一致。
 
 - Clone the repo
 
@@ -266,30 +264,45 @@ pip install -r requirements.txt
 pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/ --trusted-host=mirrors.aliyun.com
 ```
 
-使用 vLLM 启动 4B 大模型（OpenAI 兼容接口）：
+使用 vLLM 启动 4B 大模型（OpenAI 兼容接口，**推荐 v4**）：
 
 ```sh
+# v4（推荐，当前 SOTA）
 CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector4-4B \
     --port 8000 \
-    --max-model-len 1024 \
+    --max-model-len 2048 \
     --gpu-memory-utilization 0.9 \
     --seed 42 \
     >chinese_corrector.log 2>&1 &
+
+# 或者使用 v3（上一代）
+# CUDA_VISIBLE_DEVICES=0 nohup vllm serve twnlp/ChineseErrorCorrector3-4B --port 8000 --max-model-len 1024 ... &
 ```
 
-在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量 `CEC_OPENAI_BASE_URL` / `CEC_OPENAI_API_KEY` / `CEC_OPENAI_MODEL` 覆盖）：
+在 `ChineseErrorCorrector/config.py` 的 `TextCorrectConfig` 中按需修改接口配置（或用环境变量覆盖）：
 
 | 配置项 | 默认值 | 说明 |
 |:------|:------|:----|
-| `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址 |
-| `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验 |
-| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector3-4B` | 模型名，需与 `vllm serve` 加载的模型一致 |
+| `OPENAI_BASE_URL` | `http://localhost:8000/v1` | OpenAI 兼容服务地址；环境变量 `CEC_OPENAI_BASE_URL` |
+| `OPENAI_API_KEY` | `EMPTY` | API Key，vLLM serve 默认不校验；环境变量 `CEC_OPENAI_API_KEY` |
+| `OPENAI_MODEL` | `twnlp/ChineseErrorCorrector4-4B` | 模型名，需与 `vllm serve` 加载的模型一致；环境变量 `CEC_OPENAI_MODEL` |
+| `MODEL_VERSION` | `auto` | `auto`：按模型名自动判定 v3/v4；也可手动设 `v3` / `v4`；环境变量 `CEC_MODEL_VERSION` |
+| `MAX_TOKENS` | `2048` | v4 输出含 `<think>` 段，建议 ≥ 1024 |
+
+**v3 / v4 prompt 自动适配规则**：
+
+| 条件 | 选用版本 | Prompt |
+|:--|:--|:--|
+| `OPENAI_MODEL` 包含 `4-4B` / `Corrector4` / `CEC4`（不区分大小写） | v4 | `假如你是一名专业的纠错专家，请分析输入句子的语法错误类型和修改原因，并只输出纠正后的语句，错误类型如下：错别字、词语搭配错误...` |
+| 其余 | v3 | `你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：` |
+
+若自动判定不准（例如自定义模型名），可在 `config.py` 中把 `MODEL_VERSION` 显式设为 `"v3"` 或 `"v4"`。
 
 批量预测：
 
 ```sh
 python main.py
-# 输出：
+# 输出（v3、v4 返回结构完全一致，v4 的 <think>...</think> 已自动剥离）：
 # [{'source': '对待每一项工作都要一丝不够。', 'target': '对待每一项工作都要一丝不苟。', 'errors': [('够', '苟', 12)]}, {'source': '大约半个小时左右', 'target': '大约半个小时', 'errors': [('左右', '', 6)]}]
 ```
 
@@ -325,10 +338,10 @@ print(dat.lack_punctuation("小明住在北京")) # 缺少标点
 
 本仓库不再内置训练代码。如需在自有领域数据上训练或继续微调中文纠错模型，推荐使用业界主流框架 [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory)：
 
-- 训练数据：直接使用我们开源的 [`twnlp/ChinseseErrorCorrectData`](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData)（200 万条）、[`twnlp/csc_data`](https://huggingface.co/datasets/twnlp/csc_data)、[`twnlp/cgc_data`](https://huggingface.co/datasets/twnlp/cgc_data) 或 [`twnlp/lang8_hsk`](https://huggingface.co/datasets/twnlp/lang8_hsk)（百万语料）。
+- 训练数据：直接使用我们开源的 [34万COT数据集](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B)、 [200 万条监督数据](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData)、[`twnlp/csc_data`](https://huggingface.co/datasets/twnlp/csc_data)、[拼写数据集](https://huggingface.co/datasets/twnlp/cgc_data)
 - 数据增强：领域语料不足时，先用本仓库 `pip install ChineseErrorCorrector` 增强出语法/拼写错误样本，再喂给 LLaMA-Factory。
-- 基座模型：推荐 `Qwen3-4B`，与本仓库发布的 SOTA 模型一致。
-- 训练 Prompt：`你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：{source}`，target 直接为纠正后的句子。
+- 基座模型：若有COT数据，训练模型，优先使用`ChineseErrorCorrector4`作为基座进行训练，若有常规监督数据（例如：src,tgt），基座模型推荐使用 `ChineseErrorCorrector3`进行训练。
+- 训练 Prompt：`ChineseErrorCorrector4` 参考：[34万COT数据集](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B)、`ChineseErrorCorrector3` 参考： [200 万条监督数据](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData)
 
 训练完成后，将权重路径喂给 vLLM `vllm serve <your_model>`，在 `config.py` 把 `OPENAI_MODEL` 改成你自己的模型名即可无缝接入本仓库的推理与评测流程。
 

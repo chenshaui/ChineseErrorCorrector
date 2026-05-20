@@ -28,10 +28,26 @@ class TextCorrectConfig(object):
     # vLLM serve 默认即为 OpenAI 兼容接口，可配合 README 中给出的部署脚本使用。
     OPENAI_BASE_URL = os.environ.get("CEC_OPENAI_BASE_URL", "http://localhost:8000/v1")
     OPENAI_API_KEY = os.environ.get("CEC_OPENAI_API_KEY", "EMPTY")
-    OPENAI_MODEL = os.environ.get("CEC_OPENAI_MODEL", "twnlp/ChineseErrorCorrector3-4B")
+    OPENAI_MODEL = os.environ.get("CEC_OPENAI_MODEL", "twnlp/ChineseErrorCorrector4-4B")
+
+    # ---- 模型版本 / Prompt 适配 ----
+    # 支持两代纠错模型，prompt 与输出格式不同：
+    #   - v3：ChineseErrorCorrector3-4B，直接输出纠正后的句子
+    #   - v4：ChineseErrorCorrector4-4B（ACL 2026 Main），输出含 <think>...</think>
+    #         思考块 + 纠正后的句子，本仓库会自动剥掉思考块
+    # MODEL_VERSION:
+    #   - "auto"：根据 OPENAI_MODEL 名字自动判定（推荐）
+    #   - "v3" / "v4"：手动指定，覆盖自动判定
+    MODEL_VERSION = os.environ.get("CEC_MODEL_VERSION", "auto")
+
+    PROMPTS = {
+        "v3": "你是一个文本纠错专家，纠正输入句子中的语法错误，并输出正确的句子，输入句子为：",
+        "v4": "假如你是一名专业的纠错专家，请分析输入句子的语法错误类型和修改原因，并只输出纠正后的语句，错误类型如下：错别字、词语搭配错误、词性错误、语序错误、成分残缺、成分赘余、关联词使用错误、指代不明、语义逻辑不通、无误。",
+    }
 
     # 生成参数
-    MAX_TOKENS = 1024
+    # v4 模型会产生 <think>...</think> 思考块，需要预留足够 token；建议保持 ≥ 1024
+    MAX_TOKENS = 2048
     TEMPERATURE = 0
     SEED = 42
     # 并发请求数（异步批量推理时使用）
