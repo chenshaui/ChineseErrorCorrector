@@ -20,9 +20,9 @@
 
 ## 📌 项目定位
 
-**ChineseErrorCorrector** 是一个面向中文文本纠错任务的**综合平台**，集 **学术研究 · 模型评测 · 推理部署 · 数据增强** 于一体，覆盖 **拼写纠错（CSC）** 与 **语法纠错（CGEC）** 两大核心方向。
+**ChineseErrorCorrector** 是一个面向中文文本纠错任务的**综合平台**，集 **学术研究 · 模型评测 · 推理部署 · 数据增强 · 模型训练** 于一体，覆盖 **拼写纠错（CSC）** 与 **语法纠错（CGEC）** 两大核心方向，，如有帮助，感谢您的 Star ✨。
 
-🏆 荣获 **2026 ACL Main**（ChineseErrorCorrector4-4B）🎉 · [2024 CCL 冠军](https://aclanthology.org/2024.ccl-3.31/) · [2023 NLPCC-NaCGEC 纠错冠军](#nacgec-数据集-) · [2022 FCGEC 纠错冠军](#fcgec-数据集-)，如有帮助，感谢 Star ✨。
+🏆 荣获 **2026 ACL Main**（ChineseErrorCorrector4-4B）🎉 · [2024 CCL 冠军](https://aclanthology.org/2024.ccl-3.31/) · [2023 NLPCC-NaCGEC 纠错冠军](#nacgec-数据集-) · [2022 FCGEC 纠错冠军](#fcgec-数据集-)。
 
 
 ### ✨ 平台四大支柱 + 训练入口
