@@ -91,7 +91,8 @@
 
 | 数据集名称 | 数据链接 | 数据量和类别说明 | 描述 |
 |:---------|:--------|:--------------|:----|
-| ChinseseErrorCorrectData | [twnlp/ChinseseErrorCorrectData](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) | 200万 | ChineseErrorCorrector 训练数据集 |
+| ChinseseErrorCorrect4 Data | [ChinseseErrorCorrect4 Data](https://huggingface.co/datasets/twnlp/ChineseErrorCorrector4-4B) | 34万 | ChineseErrorCorrector4 COT数据集 |
+| ChinseseErrorCorrect3 Data | [ChinseseErrorCorrect3 Data](https://huggingface.co/datasets/twnlp/ChinseseErrorCorrectData) | 200万 | ChineseErrorCorrector3 训练数据集 |
 | CSC（拼写纠错数据集） | [twnlp/csc_data](https://huggingface.co/datasets/twnlp/csc_data) | W271K(279,816) Medical(39,303) Lemon(22,259) ECSpell(6,688) CSCD(35,001) | 中文拼写纠错的数据集 |
 | CGC（语法纠错数据集） | [twnlp/cgc_data](https://huggingface.co/datasets/twnlp/cgc_data) | CGED(20,449) FCGEC(37,354) MuCGEC(2,467) NaCGEC(7,568) | 中文语法纠错的数据集 |
 | Lang8+HSK（百万语料-拼写和语法错误混合数据集） | [twnlp/lang8_hsk](https://huggingface.co/datasets/twnlp/lang8_hsk) | 1,568,885 | 中文拼写和语法数据集 |
