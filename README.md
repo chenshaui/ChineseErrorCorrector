@@ -78,14 +78,14 @@
 
 ## 🎯 模型列表
 
-| 模型名称 | 纠错类型 | 状态 | 描述 |
+| 模型名称 | 纠错类型 | 是否开源 | 描述 |
 |:--------|:--------|:-----|:----|
-| [**twnlp/ChineseErrorCorrector4-4B**](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B) | 语法+拼写 | ✅ **已开源** 🔥 | ACL 2026 Main 论文模型。NACGEC $F_{0.5}$ = **50.99**，CSCD Correction F1 = **59.61**，双榜刷新 SOTA，全面超越 GPT-4。 |
-| [twnlp/ChineseErrorCorrector3-4B](https://huggingface.co/twnlp/ChineseErrorCorrector3-4B) | 语法+拼写 | ✅ 已开源 | 使用200万纠错数据进行全量训练，适用于语法纠错和拼写纠错，效果较好。 |
-| [twnlp/ChineseErrorCorrector2-7B](https://huggingface.co/twnlp/ChineseErrorCorrector2-7B) | 语法+拼写 | ✅ 已开源 | 使用200万纠错数据进行多轮迭代训练，适用于语法纠错和拼写纠错，效果较好。 |
-| [twnlp/ChineseErrorCorrector-7B](https://huggingface.co/twnlp/ChineseErrorCorrector-7B) | 拼写 | ✅ 已开源 | 使用38万开源拼写数据，支持语似、形似等拼写错误纠正，拼写纠错效果好。 |
-| [twnlp/ChineseErrorCorrector-1.5B](https://huggingface.co/twnlp/ChineseErrorCorrector-1.5B) | 拼写 | ✅ 已开源 | 使用38万开源拼写数据，支持语似、形似等拼写错误纠正，拼写纠错效果一般。 |
-| [xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra) | 字级检错门控（辅助推理） | ✅ 已开源 | 基于 Chinese ELECTRA 的轻量字级判别器，作为大模型纠错前的可选门控，仅对疑似有错的句子调用 4B 大模型，节省推理算力。详见 [README_ELECTRA.md](README_ELECTRA.md)。 |
+| [**twnlp/ChineseErrorCorrector4-4B**](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B) | 语法+拼写 | ✅ 🔥 | ACL 2026 Main 论文模型。NACGEC $F_{0.5}$ = **50.99**，CSCD Correction F1 = **59.61**，双榜刷新 SOTA，全面超越 GPT-4。 |
+| [twnlp/ChineseErrorCorrector3-4B](https://huggingface.co/twnlp/ChineseErrorCorrector3-4B) | 语法+拼写 | ✅  | 使用200万纠错数据进行全量训练，适用于语法纠错和拼写纠错，效果较好。 |
+| [twnlp/ChineseErrorCorrector2-7B](https://huggingface.co/twnlp/ChineseErrorCorrector2-7B) | 语法+拼写 | ✅  | 使用200万纠错数据进行多轮迭代训练，适用于语法纠错和拼写纠错，效果较好。 |
+| [twnlp/ChineseErrorCorrector-7B](https://huggingface.co/twnlp/ChineseErrorCorrector-7B) | 拼写 | ✅  | 使用38万开源拼写数据，支持语似、形似等拼写错误纠正，拼写纠错效果好。 |
+| [twnlp/ChineseErrorCorrector-1.5B](https://huggingface.co/twnlp/ChineseErrorCorrector-1.5B) | 拼写 | ✅  | 使用38万开源拼写数据，支持语似、形似等拼写错误纠正，拼写纠错效果一般。 |
+| [xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra) | 字级检错门控（辅助推理） | ✅  | 基于 Chinese ELECTRA 的轻量字级判别器，作为大模型纠错前的可选门控，仅对疑似有错的句子调用 4B 大模型，节省推理算力。详见 [README_ELECTRA.md](README_ELECTRA.md)。 |
 
 ## 📊 数据集
 
