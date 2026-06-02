@@ -144,7 +144,7 @@
 
 | Model Name | Correction F1 |
 |:-----------|:---:|
-| **twnlp/ChineseErrorCorrector4-4B** ✅ | **59.61** |
+| **twnlp/ChineseErrorCorrector4-4B** 🏆 | **59.61** |
 | GPT-4 (Few-shot) | 54.41 |
 | MDCSpell+ARM | 48.93 |
 | SMBERT | 44.67 |
