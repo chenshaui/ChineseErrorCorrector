@@ -346,7 +346,7 @@ print(dat.lack_punctuation("小明住在北京")) # 缺少标点
 
 **微信：** NLP技术交流群。
 
-<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/_chat.jpg" width="200" />
+<img src="https://github.com/TW-NLP/ChineseErrorCorrector/blob/main/images/chat.jpg" width="200" />
 
 
 ## References
