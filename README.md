@@ -37,7 +37,11 @@
 
 ## 🔥🔥🔥 新闻
 
-[2026/05] 🎉🎉🎉 **ChineseErrorCorrector4-4B 正式开源发布！** 论文荣获 **ACL 2026 Main**，在 NACGEC 和 CSCD 双榜刷新 SOTA，全面超越 GPT-4 及同量级模型！ 🤗 [HuggingFace 模型地址](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B)
+[2026/05/19] 🎉🎉🎉 **ChineseErrorCorrector4-4B 论文发布！**  [查看论文](https://arxiv.org/pdf/2606.00020)
+
+[2026/05/19] 🎉🎉🎉 **ChineseErrorCorrector4-4B 正式开源发布！** 论文荣获 **ACL 2026 Main**，在 NACGEC 和 CSCD 双榜刷新 SOTA，全面超越 GPT-4 及同量级模型！ 🤗 [HuggingFace 模型地址](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B)
+
+[2026/05/] 🎉🎉🎉 **ChineseErrorCorrector4-4B 正式开源发布！** 论文荣获 **ACL 2026 Main**，在 NACGEC 和 CSCD 双榜刷新 SOTA，全面超越 GPT-4 及同量级模型！ 🤗 [HuggingFace 模型地址](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B)
 
 [2026/05/14] 🎉 开源**字级检错门控模型** [xurong123/ChineseErrorDetectorElectra](https://huggingface.co/xurong123/ChineseErrorDetectorElectra)：基于 Chinese ELECTRA 的轻量字级判别器，作为大模型纠错前的可选门控，**仅对疑似有错的句子调用 4B 大模型**，显著节省推理算力。详见 [README_ELECTRA.md](README_ELECTRA.md)。
 
@@ -316,7 +320,19 @@ print(dat.lack_punctuation("小明住在北京")) # 缺少标点
 
 ## Citation
 
-如果本工作对您有帮助，欢迎引用（**ChineseErrorCorrector4-4B / ACL 2026 Main** 论文整理中，发布后更新引用）：
+如果本工作对您有帮助，欢迎引用：
+
+```bibtex
+@misc{tian2026csrpchainofthoughtreasoningchinese,
+      title={CSRP: Chain-of-Thought Reasoning for Chinese Text Correction via Reinforcement Learning with Efficiency-Aware Rewards}, 
+      author={Wei Tian and Yuhao Zhou and Man Lan},
+      year={2026},
+      eprint={2606.00020},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2606.00020}, 
+}
+```
 
 ```bibtex
 @misc{tian2025chineseerrorcorrector34bstateoftheartchinesespelling,
