@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it using the metadata from this file."
+title: "ChineseErrorCorrector: A Comprehensive Platform for Chinese Text Correction"
+authors:
+  - family-names: Tian
+    given-names: Wei
+  - family-names: Zhou
+    given-names: Yuhao
+  - family-names: Lan
+    given-names: Man
+repository-code: "https://github.com/TW-NLP/ChineseErrorCorrector"
+license: Apache-2.0
+preferred-citation:
+  type: article
+  title: "CSRP: Chain-of-Thought Reasoning for Chinese Text Correction via Reinforcement Learning with Efficiency-Aware Rewards"
+  authors:
+    - family-names: Tian
+      given-names: Wei
+    - family-names: Zhou
+      given-names: Yuhao
+    - family-names: Lan
+      given-names: Man
+  year: 2026
+  identifiers:
+    - type: other
+      value: "arXiv:2606.00020"
+      description: arXiv preprint
+  url: "https://arxiv.org/abs/2606.00020"

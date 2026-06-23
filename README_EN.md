@@ -314,6 +314,14 @@ If this work is helpful, please kindly cite as:
 }
 ```
 
+## Contributing
+
+Contributions of all kinds are welcome: reporting issues, improving documentation, adding data, fixing bugs, and submitting new features. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the Issue / Pull Request guidelines and code style before you start.
+
+## License
+
+This project is released under the [Apache-2.0 License](LICENSE). You are free to use it for research and commercial purposes; please retain the copyright and license notices.
+
 ## References
 
 * [pycorrector (Chinese Corrector System)](https://github.com/shibing624/pycorrector)
