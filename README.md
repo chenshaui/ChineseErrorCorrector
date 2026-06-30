@@ -37,7 +37,7 @@
 
 ## 🔥🔥🔥 新闻
 
-[2026/06/02] 🎉🎉🎉 **ChineseErrorCorrector4-4B 论文发布！**  [查看论文](https://arxiv.org/pdf/2606.00020)
+[2026/06/02] 🎉🎉🎉 **ChineseErrorCorrector4-4B 论文发布！**  [查看论文](https://aclanthology.org/2026.acl-long.1733/)
 
 [2026/05/19] 🎉🎉🎉 **ChineseErrorCorrector4-4B 正式开源发布！** 论文荣获 **ACL 2026 Main**，在 NACGEC 和 CSCD 双榜刷新 SOTA，全面超越 GPT-4 及同量级模型！ 🤗 [HuggingFace 模型地址](https://huggingface.co/twnlp/ChineseErrorCorrector4-4B)
 
