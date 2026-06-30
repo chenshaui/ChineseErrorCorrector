@@ -319,14 +319,24 @@ print(dat.lack_punctuation("小明住在北京")) # 缺少标点
 如果本工作对您有帮助，欢迎引用：
 
 ```bibtex
-@misc{tian2026csrpchainofthoughtreasoningchinese,
-      title={CSRP: Chain-of-Thought Reasoning for Chinese Text Correction via Reinforcement Learning with Efficiency-Aware Rewards}, 
-      author={Wei Tian and Yuhao Zhou and Man Lan},
-      year={2026},
-      eprint={2606.00020},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2606.00020}, 
+@inproceedings{tian-etal-2026-csrp,
+    title = "{CSRP}: Chain-of-Thought Reasoning for {C}hinese Text Correction via Reinforcement Learning with Efficiency-Aware Rewards",
+    author = "Tian, Wei  and
+      Zhou, Yuhao  and
+      Lan, Man",
+    editor = "Liakata, Maria  and
+      Moreira, Viviane P.  and
+      Zhang, Jiajun  and
+      Jurgens, David",
+    booktitle = "Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, California, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.acl-long.1733/",
+    pages = "37349--37365",
+    ISBN = "979-8-89176-390-6",
+    abstract = "Large Language Model (LLM) based Chinese Grammatical Error Correction (CGEC) systems face two critical challenges: general-purpose models lack specialized linguistic priors for subtle grammatical distinctions, and Supervised Fine-Tuning (SFT) with Maximum Likelihood Estimation fails to optimize for precision-focused metrics, leading to systematic over-correction. We propose CSRP, a three-stage framework that progressively builds correction capability through Continual Pre-training (CPT) on 5.9M balanced samples to internalize domain knowledge, Chain-of-Thought SFT with explicit error reasoning for diagnostic transparency, and Group Relative Policy Optimization with a novel Efficiency-Aware Reward that explicitly penalizes unnecessary edits. On the NACGEC benchmark, CSRP achieves state-of-the-art performance with 50.99 $F_{0.5}$ and 57.17 precision, substantially outperforming previous best results while effectively mitigating the over-correction bias inherent in MLE-trained models. Our method also advances CSCD spelling correction to 59.61 F1, surpassing GPT-4 by 5.20 points. Comprehensive ablation studies demonstrate that the RL alignment stage contributes a 8{\%} relative gain over the SFT baseline, and that this gain is orthogonal to the contribution of large-scale CPT, validating that explicit optimization for edit efficiency is essential for high-quality grammatical error correction. Our code is available at https://github.com/TW-NLP/ChineseErrorCorrector."
 }
 ```
 
